@@ -12,15 +12,20 @@ import com.luv2code.hibernate.demo.entity.Student;
 
 public class QueryStudentDemo {
 	
-	
+	public static void displayStudents(List<Student> students)
+	{
+		for(Student student : students) {
+			System.out.println(student);
+		}
+	}
 
 	public static void main(String[] args) {
 		
 		SessionFactory factory = new Configuration()
 								.configure("hibernate.cfg.xml")
 								.addAnnotatedClass(Student.class)
+								
 								.buildSessionFactory();
-
 		Session session = factory.getCurrentSession();
 		
 		//try block is used to save student object to a DB
@@ -28,18 +33,18 @@ public class QueryStudentDemo {
 			
 			session.beginTransaction();
 			
-			List<Student> students = session.createQuery("SELECT * FROM Student").list();
+			System.out.println("\n\nAll Students: ");
+			List<Student> allStudents = session.createQuery("FROM Student").list();
+			displayStudents(allStudents);
 			
-			for(Student student : students) {
-				System.out.println(student);
-			}
+			System.out.println("\n\nStudents with Special Name: ");
+			List<Student> studentsWithNameList = session.createQuery("FROM Student s where s.firstName = 'The'"
+					+ " OR s.firstName = 'Miles'").list();
+			displayStudents(studentsWithNameList);
 			
-			
-			List<Student> studentsWithNameList = session.createQuery("FROM Student s where s.firstName = 'The'").list();
-			
-			for(Student student : studentsWithNameList) {
-				System.out.println(student);
-			}
+			System.out.println("\n\nStudents with specificEmail: ");
+			List<Student> studentsWithSpecificEmail = session.createQuery("FROM Student where email LIKE '%guyemail@gmail.com'  ").list();
+			displayStudents(studentsWithSpecificEmail);
 			
 			session.getTransaction().commit();
 			System.out.println("Done!");

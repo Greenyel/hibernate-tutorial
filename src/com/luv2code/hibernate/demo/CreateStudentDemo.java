@@ -24,7 +24,7 @@ public class CreateStudentDemo {
 		//try block is used to save student object to a DB
 		try {
 			System.out.println("Creating new student object");
-			Student tempStudent = new Student("The", "Guy", "theguyemail@gmail.com");
+			Student tempStudent = new Student("New", "Guy", "newguyemail@gmail.com");
 			
 			session.beginTransaction();
 			
